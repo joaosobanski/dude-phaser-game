@@ -12,6 +12,9 @@ class GameScene extends Phaser.Scene {
     private gameOver = false;
     private scoreText!: Phaser.GameObjects.Text;
     private socket: Socket
+    private keys: {
+        a: any; d: any; w: any; space: any;
+    };
 
     constructor() {
         super('GameScene');
@@ -67,7 +70,12 @@ class GameScene extends Phaser.Scene {
 
         // Input Events
         this.cursors = this.input.keyboard?.createCursorKeys();
-
+        this.keys = {
+            a: this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+            d: this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+            w: this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+            space: this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+        };
         // Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
         this.stars = this.physics.add.group({
             key: 'star',
@@ -102,10 +110,10 @@ class GameScene extends Phaser.Scene {
             return;
         }
 
-        if (this.cursors.left.isDown) {
+        if (this.cursors.left.isDown || this.keys.a.isDown) {
             this.player.setVelocityX(-160);
             this.player.anims.play('left', true);
-        } else if (this.cursors.right.isDown) {
+        } else if (this.cursors.right.isDown || this.keys.d.isDown) {
             this.player.setVelocityX(160);
             this.player.anims.play('right', true);
         } else {
@@ -113,7 +121,7 @@ class GameScene extends Phaser.Scene {
             this.player.anims.play('turn');
         }
 
-        if (this.cursors.up.isDown && this.player.body.touching.down) {
+        if ((this.cursors.up.isDown || this.keys.w.isDown || this.keys.space.isDown) && this.player.body.touching.down) {
             this.player.setVelocityY(-330);
         }
     }

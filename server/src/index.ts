@@ -7,17 +7,132 @@ import { matchRepository, pointRepository, userRepository } from "./repository";
 import { User } from "./entity/User";
 import { Match } from "./entity/Match";
 import { Points } from "./entity/Points";
+import cors from 'cors'
 
-const port = 4003;
+const port = 5007;
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
+
+
+async function getPointsWithRanking(): Promise<any[]> {
+
+    const query = `
+        select 
+            points, 
+            "matchId",  
+            RANK() OVER (ORDER BY points DESC) AS position, 
+            "username"
+
+            from ( 
+                select sum(a."point") as points, a."matchId", u.username  from "points" as a
+                join "match" m on m.id = a."matchId" 
+                join "user" u on u.id = m."userId"
+                group by a."matchId" , u.username
+            )
+        order by points desc
+    `;
+
+    try {
+        const result = await AppDataSource.query(query);
+        return result;
+    } catch (error) {
+        console.error('Error executing query', error);
+        throw new Error('Failed to retrieve data');
+    }
+}
+async function getPointsWithRankingById(id: string): Promise<any> {
+    const query = `
+        select 
+        points,  "matchId",  position ,  "username"
+        from
+        (
+            select points, "matchId",  
+            RANK() OVER (ORDER BY points DESC) AS position, "username"
+            from ( 
+                select sum(a."point") as points, a."matchId", u.username  from "points" as a
+                join "match" m on m.id = a."matchId" 
+                join "user" u on u.id = m."userId"
+                group by a."matchId" , u.username
+            )
+        order by points desc
+        )
+        where  "matchId" = '${id}'
+    `;
+
+    try {
+        const result = await AppDataSource.query(query);
+        if (result.length > 0)
+            return result[0];
+        return result
+    } catch (error) {
+        console.error('Error executing query', error);
+        throw new Error('Failed to retrieve data');
+    }
+}
+
+async function getPointsWithRankingByUserId(id: string): Promise<any> {
+    const query = `
+       
+        select 
+        points,  "matchId",  position ,  "username", "userId"
+        from
+        (
+            select points, "matchId",  
+            RANK() OVER (ORDER BY points DESC) AS position, "username", "userId"
+            from ( 
+                select sum(a."point") as points, a."matchId", u.username, u.id as "userId" from "points" as a
+                join "match" m on m.id = a."matchId" 
+                join "user" u on u.id = m."userId"
+                group by a."matchId" , u.username, u.id
+            )
+            order by points desc
+        )
+        where  "userId" = '${id}'
+    `;
+
+    try {
+        const result = await AppDataSource.query(query);
+        return result
+    } catch (error) {
+        console.error('Error executing query', error);
+        throw new Error('Failed to retrieve data');
+    }
+}
 
 app.get('/test', (req: Request, res: Response) => {
     io.emit('test', 'test')
     res.json({ success: true })
 })
+
+
+app.get('/rank', async (req: Request, res: Response) => {
+    const vals = await getPointsWithRanking()
+    res.json(vals)
+})
+
+app.get('/match/:id', async (req: Request, res: Response) => {
+    if (req.params.id) {
+        const vals = await getPointsWithRankingById(req.params.id as string)
+        res.json(vals)
+    }
+    else {
+        res.status(400).json({ error: true })
+    }
+})
+
+app.get('/user/:id', async (req: Request, res: Response) => {
+    if (req.params.id) {
+        const vals = await getPointsWithRankingByUserId(req.params.id as string)
+        res.json(vals)
+    }
+    else {
+        res.status(400).json({ error: true })
+    }
+})
+
 
 app.post('/login', async (req: Request, res: Response) => {
     try {
