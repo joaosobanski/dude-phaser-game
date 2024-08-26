@@ -23,7 +23,8 @@
     ],
     "scripts": {
         "dev": "next dev -p 5006",
-        "build": "next build -p 5006"
+        "build": "next build",
+        "start": "next start -p 5006"
     },
     "dependencies": {
         "axios": "^1.7.5",

@@ -8,7 +8,7 @@ import { User } from "./entity/User";
 import { Match } from "./entity/Match";
 import { Points } from "./entity/Points";
 import cors from 'cors'
-
+//dude-api.onblocklabs.com
 const port = 5007;
 
 const app = express();
