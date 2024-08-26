@@ -6,7 +6,7 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export const url = 'http://localhost:4003'
+export const url = 'https://dude-api.onblocklabs.com'
 
 export default function App() {
 
