@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { IRefPhaserGame, PhaserGame } from './game/PhaserGame';
 import { disconnectSocket, initializeSocket, getSocket, setMatchId, matchId } from './socketService';
 import { EventBus } from './game/EventBus';
@@ -6,6 +6,7 @@ import axios from 'axios';
 import { url } from './App';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import Image from 'next/image';
 
 function GameApp() {
     // The sprite can only be moved in the MainMenu Scene
@@ -120,59 +121,58 @@ function GameApp() {
     }
 
     return (
-        <div id="app">
+        <Fragment>
             {
+
                 (!matchId || die) &&
                 <div className='flex flex-col items-center gap-10'>
+                    <div className='flex'>
+                        <Image src="/eng1.png" alt="Eu amo FAG" width={700} height={200} />
+                    </div>
 
-                    <form className="flex flex-col gap-5" onSubmit={handleSubmit(submit)}>
-                        <div>
-                            <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nome</label>
-                            <input type="text" id="first_name"
-                                {...register('nome', { required: true })}
+                    <div className=''>
+                        <form className="flex flex-col gap-5" onSubmit={handleSubmit(submit)}>
+                            <div>
+                                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nome</label>
+                                <input type="text" id="first_name"
+                                    {...register('nome', { required: true })}
 
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
-                        </div>
-                        <div>
-                            <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fone</label>
-                            <input type="" id="first_name"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="fone"
-                                {...register('fone', { required: true })}
-                                required />
-                        </div>
-                        <div>
-                            <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Colegio</label>
-                            <input type="colegio" id="first_name"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="colegio"
-                                {...register('colegio', { required: true })}
-                                required />
-                        </div>
-                        <div>
-                            <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ano</label>
-                            <input type="ano" id="first_name"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="ano"
-                                {...register('ano', { required: true })}
-                                required />
-                        </div>
-                        <div className="flex justify-between">
-                            <button type="submit"
-                                className="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >
-                                Entrar
-                            </button>
-                        </div>
-                    </form>
+                                    className="bg-gray-50 border border-gray-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="John" required />
+                            </div>
+                            <div>
+                                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fone</label>
+                                <input type="" id="first_name"
+                                    className="bg-gray-50 border border-gray-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                    placeholder="fone"
+                                    {...register('fone', { required: true })}
+                                    required />
+                            </div>
+                            <div>
+                                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Colegio</label>
+                                <input type="colegio" id="first_name"
+                                    className="bg-gray-50 border border-gray-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                    placeholder="colegio"
+                                    {...register('colegio', { required: true })}
+                                    required />
+                            </div>
+                            <div>
+                                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ano</label>
+                                <input type="ano" id="first_name"
+                                    className="bg-gray-50 border border-gray-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                    placeholder="ano"
+                                    {...register('ano', { required: true })}
+                                    required />
+                            </div>
+                            <div className="flex justify-between">
+                                <button type="submit"
+                                    className="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                >
+                                    Entrar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
 
-                    {/* <div>
-                        <button onClick={novaPartida}
-                            className="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        >
-                            New Match
-                        </button>
-                    </div> */}
 
                     {
                         list.length > 0 &&
@@ -216,11 +216,15 @@ function GameApp() {
                     }
                 </div>
             }
+
             {
                 logged && !die &&
-                <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
+                <div id="app">
+                    <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
+                </div>
             }
-        </div>
+
+        </Fragment>
     )
 }
 
