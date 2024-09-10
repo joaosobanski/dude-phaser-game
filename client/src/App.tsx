@@ -7,8 +7,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from "next/image";
 
-// export const url = 'https://dude-api.onblocklabs.com'
-export const url = 'http://localhost:5007'
+export const url = 'https://dude-api.onblocklabs.com'
+// export const url = 'http://localhost:5007'
 
 export default function App() {
 
