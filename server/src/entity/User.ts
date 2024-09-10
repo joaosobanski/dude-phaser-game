@@ -13,6 +13,18 @@ export class User {
     @Column({ length: 400 })
     password: string
 
+    @Column({ length: 400, nullable: true })
+    colegio: string
+
+    @Column({ length: 400, nullable: true })
+    ano: string
+
+    @Column({ length: 400, nullable: true })
+    nome: string
+
+    @Column({ length: 400, nullable: true })
+    fone: string
+
     @Column({ default: new Date(Date.now()) })
     createdAt: Date
 

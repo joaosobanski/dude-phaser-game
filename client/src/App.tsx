@@ -5,8 +5,10 @@ import { useForm } from 'react-hook-form';
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Image from "next/image";
 
-export const url = 'https://dude-api.onblocklabs.com'
+// export const url = 'https://dude-api.onblocklabs.com'
+export const url = 'http://localhost:5007'
 
 export default function App() {
 
@@ -19,7 +21,7 @@ export default function App() {
             .then(e => {
                 console.log(e)
                 if (e.data) {
-                    sessionStorage.setItem('token', e.data.token)
+                    localStorage.setItem('token', e.data.token)
                     setGame(true)
                 } else {
                     toast.error('Erro inesperado');
@@ -62,17 +64,19 @@ export default function App() {
                 game ?
                     <GameApp />
                     :
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center p-5">
+                        <Image src="/eu_amo_fag.png" alt="Eu amo FAG" width={500} height={500} />
                         <form className="flex flex-col gap-5" onSubmit={handleSubmit(submit)}>
                             <div>
-                                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+                                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">E-mail</label>
                                 <input type="text" id="first_name"
                                     {...register('username', { required: true })}
-
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="joaosobanski@fag.edu.br"
+                                    required />
                             </div>
                             <div>
-                                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Senha</label>
                                 <input type="password" id="first_name"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="****"

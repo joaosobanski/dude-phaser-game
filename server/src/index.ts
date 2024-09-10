@@ -43,6 +43,7 @@ async function getPointsWithRanking(): Promise<any[]> {
         throw new Error('Failed to retrieve data');
     }
 }
+
 async function getPointsWithRankingById(id: string): Promise<any> {
     const query = `
         select 
@@ -134,12 +135,73 @@ app.get('/user/:id', async (req: Request, res: Response) => {
 })
 
 
+app.get('/details/:id', async (req: Request, res: Response) => {
+    if (req.params.id) {
+        const vals = await userRepository.findOneBy({
+            id: req.params.id
+        })
+        res.json(vals)
+    }
+    else {
+        res.status(400).json({ error: true })
+    }
+})
+
+app.post('/update', async (req: Request, res: Response) => {
+    try {
+        const { id, colegio, fone, nome, ano } = req.body
+
+        if (!id) {
+            throw ('usuario não informado!')
+        }
+
+        if (!colegio) {
+            throw ('colegio não informado!')
+        }
+
+        if (!fone)
+            throw ('fone não informado!')
+
+        if (!nome)
+            throw ('nome não informado!')
+
+        if (!ano)
+            throw ('ano não informado!')
+
+        let user = await userRepository.findOneBy({
+            id
+        })
+
+        if (user) {
+            user.ano = ano
+            user.colegio = colegio
+            user.fone = fone
+            user.nome = nome
+
+            user = await userRepository.save(user)
+
+            return res.json({
+                token: user.id
+            })
+
+        } else {
+            throw ('usuario não informado!')
+        }
+    } catch (e) {
+        console.error(e)
+        res.status(400).json(e)
+    }
+})
+
 app.post('/login', async (req: Request, res: Response) => {
     try {
         const { username, password } = req.body
 
         if (!username) {
-            throw ('username não informado!')
+            throw ('Email não informado!')
+        }
+        if (!username.includes('@')) {
+            throw ('Email não informado!')
         }
 
         if (!password)
@@ -154,7 +216,8 @@ app.post('/login', async (req: Request, res: Response) => {
             const valid = await bcrypt.compare(password, user.password)
             if (valid) {
                 return res.json({
-                    token: user.id
+                    token: user.id,
+                    ...user
                 })
             } else {
                 throw ('password errada')
@@ -168,7 +231,8 @@ app.post('/login', async (req: Request, res: Response) => {
             u = await userRepository.save(u)
 
             return res.json({
-                token: u.id
+                token: u.id,
+                ...user
             })
         }
     } catch (e) {
