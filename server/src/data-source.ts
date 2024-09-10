@@ -10,7 +10,7 @@ export const AppDataSource = new DataSource({
     port: 5432,
     username: "postgres",
     password: `${process.env.BD_PASS}`,
-    database: "dude-game",
+    database: "dude-game2",
     synchronize: true,
     logging: false,
     entities: ['src/entity/*'],
